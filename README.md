@@ -9,7 +9,7 @@ A: Constraint propogation is using local constraints to reduce the search space 
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: We add the diagonal units to the set of constraints. The values of a box in the a diagonal constrains the values of
+A: We add the diagonal units to the set of constraints. The values of a box in the diagonal constrains the values of
    the other diagonal boxes. The constraint propagation here is similar to that of the row, column, and square constraints.
 
 ### Install
