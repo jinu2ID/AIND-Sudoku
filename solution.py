@@ -27,7 +27,26 @@ def naked_twins(values):
     """
 
     # Find all instances of naked twins
+    twins = []
+    for box in boxes:
+        if (len(values[box]) == 2):
+            # check peers for twin
+            for peer in peers[box]:
+                if (values[peer] == values[box]):
+                    twins.append((box, peer))
+
     # Eliminate the naked twins as possibilities for their peers
+    for twin in twins:
+        twin1 = twin[0]
+        twin2 = twin[1]
+        for unit in unitlist:
+            if (twin1 in unit and twin2 in unit):
+                for box in unit:
+                    if (box != twin1 and box != twin2):
+                        for digit in values[twin1]:
+                            value = values[box].replace(digit, "")
+                            values = assign_value(values, box, value)
+    return values
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
@@ -38,7 +57,8 @@ boxes = cross(rows, cols)
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-unitlist = row_units + column_units + square_units
+diag_units   = [[row + col for row, col in zip(rows, cols)], [row + col for row, col in zip(rows[::-1], cols)]]
+unitlist = row_units + column_units + square_units + diag_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
@@ -138,6 +158,7 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    return search(grid_values(grid))
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
